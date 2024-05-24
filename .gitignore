@@ -3,3 +3,5 @@
 /runs/
 /dataset/images/
 /dataset/labels/
+/videos/
+/model/blue_focus.pt

@@ -1,19 +1,29 @@
 from ultralytics import YOLO
+import utils
 
-# Load a pretrained YOLO model (recommended for training)
-model = YOLO("yolov8n.pt")
+yolo_model = 'model/yolov8n.pt'
+custom_yaml = 'dataset/dataset.yaml'
+custom_model = 'model/blue_focus.pt'
 
-# Train the model using the 'coco8.yaml' dataset for 3 epochs
-results = model.train(data='dataset/dataset.yaml', epochs=3)
 
-# Evaluate the model's performance on the validation set
-results = model.val()
+@utils.timer
+def train() -> YOLO:
+    model = YOLO(yolo_model)
 
-# # Perform object detection on an image using the model
-# results = model("https://ultralytics.com/images/bus.jpg")
+    model.train(data=custom_yaml, epochs=100)
 
-# # Export the model to ONNX format
-# success = model.export(format="onnx")
+    model.val(split='test')
 
-print('*************')
-print(results)
+    return model
+
+@utils.timer
+def load(path) -> YOLO:
+    model = YOLO(path)
+    return model
+
+
+if __name__ == '__main__':
+    model = train()
+    # model = load(r"runs\detect\train9\weights\best.pt")
+
+    # model.predict(r'D:\图片\steam\1203220_20240522144131_2.png', save=True)
