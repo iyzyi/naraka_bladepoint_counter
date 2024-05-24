@@ -6,18 +6,23 @@ def timer(func):
         result = func(*args, **kwargs)
         end_time = time.time()
         run_time = end_time - start_time
-        h = run_time // 3600
-        m = (run_time % 3600) // 60
+        h = int(run_time // 3600)
+        m = int((run_time % 3600) // 60)
         s = (run_time % 60)
         if h > 0:
-            run_time_str = f'{h}时{m}分{s}秒'
+            run_time_str = f'{h}时{m}分{s:.3f}秒'
         elif m > 0:
-            run_time_str = f'{m}分{s}秒'
+            run_time_str = f'{m}分{s:.3f}秒'
         else:
             run_time_str = f'{s:.3f}秒'
         print(f"函数{func.__name__}运行时长: {run_time_str}")
         return result
     return wrapper
+
+
+def time2str(timestamp):
+    return time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(timestamp)) + f'_{int(timestamp * 1000) % 1000:03d}'
+
 
 
 if __name__ == "__main__":
